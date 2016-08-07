@@ -12,7 +12,7 @@ module Paperclip
 
     class Railtie
       def self.insert
-        Paperclip::Attachment.prepend Paperclip::Meta::Attachement
+        Paperclip::Attachment.prepend Paperclip::Meta::Attachment
       end
     end
   end
