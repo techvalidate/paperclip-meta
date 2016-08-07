@@ -3,33 +3,29 @@ module Paperclip
     module Attachment
       def self.included(base)
         base.send :include, InstanceMethods
-        base.alias_method_chain :assign_attributes, :meta_data
-        base.alias_method_chain :save, :meta_data
-        base.alias_method_chain :post_process_styles, :meta_data
-        base.alias_method_chain :size, :meta_data
       end
 
       module InstanceMethods
-        def assign_attributes_with_meta_data
-          assign_attributes_without_meta_data
+        def assign_attributes
+          super
           assign_meta
         end
 
-        def save_with_meta_data
+        def save
           if @queued_for_delete.any? && @queued_for_write.empty?
             instance_write(:meta, meta_encode({}))
           end
-          save_without_meta_data
+          super
         end
 
-        def post_process_styles_with_meta_data(*styles)
-          post_process_styles_without_meta_data(*styles)
+        def post_process_styles_a(*styles)
+          super styles
           assign_meta
         end
 
         # Use meta info for style if required
-        def size_with_meta_data(style = nil)
-          style ? read_meta(style, :size) : size_without_meta_data
+        def size(style = nil)
+          style ? read_meta(style, :size) : super
         end
 
         def height(style = default_style)
